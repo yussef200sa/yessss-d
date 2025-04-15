@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CALLME</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    audio {
+      display: none;
+    }
+
+    #photo {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+    }
+
+    .animated-text {
+      animation: lightning 1s linear infinite;
+    }
+
+    @keyframes lightning {
+      0% { color: red; }
+      50% { color: black; }
+      100% { color: white; }
+    }
+
+    #nameDisplay {
+      margin-top: 20px;
+      font-size: 30px;
+    }
+
+    .cmd-text-container {
+      margin-top: 20px;
+    }
+
+    .cmd-text {
+      font-size: 19px;
+      color: black;
+      -webkit-text-stroke: 1px white;
+      white-space: nowrap;
+      animation: scrollText 20s linear infinite;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .json-data {
+      white-space: pre;
+      text-shadow: -1px -1px 0 black, 1px -1px 0 black,
+                   -1px 1px 0 black, 1px 1px 0 black;
+    }
+
+    #messageForm {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video autoplay muted loop>
+    <source src="https://cdn.discordapp.com/attachments/1166669805768679495/1265074516887863366/2024-07-21_23-35-43_1.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Background Audio -->
+  <audio autoplay loop>
+    <source src="https://cdn.discordapp.com/attachments/1166669805768679495/1265074157025103872/2024-07-21_23-35-43_1.mp3" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
+
+  <!-- Animated Text -->
+  <h3 class="animated-text">جاهزين تتناكو ؟</h3>
+
+  <!-- Rotating Name -->
+  <h1 id="nameDisplay">CALLME</h1>
+
+  <!-- Rotating Image -->
+  <img id="photo" src="" alt="Photo">
+
+  <!-- IP Info -->
+  <p id="ip-address">
+    <span>Your IP Address: </span>
+    <span id="ip-address-value">Unable to fetch IP address.</span>
+  </p>
+
+  <h3>Your IP Info:</h3>
+  <pre id="ip-info" class="json-data">Unable to fetch IP information.</pre>
+
+  <!-- Scrolling Text -->
+  <div class="cmd-text-container">
+    <div class="cmd-text">تـــــــم النيـــــــك</div>
+  </div>
+
+  <!-- Feedback Form -->
+  <h2>Feedback</h2>
+  <form id="messageForm">
+    <label for="message">Message:</label><br>
+    <input type="text" id="message" name="message"><br><br>
+    <button type="submit">Send Message</button>
+  </form>
+
+  <!-- Scripts -->
+  <script>
+    const photos = [
+      "https://cdn.discordapp.com/attachments/1166669805768679495/1264836924116566088/image.png",
+      "https://cdn.discordapp.com/avatars/1072701097350795375/27252841227e78983dc8d898b1ae8c35.png?size=1024",
+    ];
+
+    let currentPhotoIndex = 0;
+    const photoElement = document.getElementById('photo');
+
+    function changePhoto() {
+      photoElement.src = photos[currentPhotoIndex];
+      currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+    }
+
+    setInterval(changePhoto, 1000);
+    changePhoto();
+
+    const namesAndColors = [
+      { name: "Hacked by [EXE.CALLME]", color: "black" },
+      { name: "Hacked by [exe.6.eldokSH]", color: "red" }
+    ];
+
+    let index = 0;
+    function changeName() {
+      const el = document.getElementById("nameDisplay");
+      el.textContent = namesAndColors[index].name;
+      el.style.color = namesAndColors[index].color;
+      index = (index + 1) % namesAndColors.length;
+    }
+
+    setInterval(changeName, 1000);
+    changeName();
+
+    document.getElementById('messageForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const message = document.getElementById('message').value.trim();
+      if (!message) return alert('Message cannot be empty.');
+
+      fetch('https://discordapp.com/api/webhooks/1265115299783381033/BZ8l-g0AaTyyy2RTWTkzry9xtA01ZsnkUVnSZykrqHe-mQkoFph3HRsM5AUh_KCo1-DH', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: message })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to send');
+        alert('Thanks, CALLME!');
+        document.getElementById('message').value = '';
+      })
+      .catch(console.error);
+    });
+  </script>
+</body>
+</html>
